@@ -1,16 +1,14 @@
-import  { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect } from "react"
 import { useLocation, useNavigationType } from "react-router-dom"
 
 interface LoadingContextType {
-  loading: boolean
-  setLoading: (isLoading: boolean) => void
+  isLoading: boolean
   startLoading: () => void
   stopLoading: () => void
 }
 
 const LoadingContext = createContext<LoadingContextType>({
-  loading: false,
-  setLoading: () => {},
+  isLoading: false,
   startLoading: () => {},
   stopLoading: () => {},
 })
@@ -22,41 +20,34 @@ interface LoadingProviderProps {
 }
 
 export const LoadingProvider: React.FC<LoadingProviderProps> = ({ children }) => {
-  const [loading, setLoading] = useState(false)
-  const [loadingTimer, setLoadingTimer] = useState<NodeJS.Timeout | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const location = useLocation()
   const navigationType = useNavigationType()
 
   const startLoading = () => {
-    // Clear any existing timer
-    if (loadingTimer) clearTimeout(loadingTimer)
-    setLoading(true)
+    setIsLoading(true)
   }
 
   const stopLoading = () => {
-    // Add a small delay before turning off loading for better UX
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 500)
-    setLoadingTimer(timer)
+    setIsLoading(false)
   }
 
   // Detect route changes
   useEffect(() => {
-    if (navigationType !== "POP") {
-      startLoading()
-      
-      // Set a maximum loading time (3 seconds)
-      const maxLoadingTimer = setTimeout(() => {
-        stopLoading()
-      }, 3000)
-      
-      return () => clearTimeout(maxLoadingTimer)
-    }
+    // Start loading on route change
+    startLoading()
+    
+    // Set a fixed loading time (1 second)
+    const timer = setTimeout(() => {
+      stopLoading()
+    }, 1000)
+    
+    // Clean up timer
+    return () => clearTimeout(timer)
   }, [location.pathname])
 
   return (
-    <LoadingContext.Provider value={{ loading, setLoading, startLoading, stopLoading }}>
+    <LoadingContext.Provider value={{ isLoading, startLoading, stopLoading }}>
       {children}
     </LoadingContext.Provider>
   )

@@ -133,7 +133,7 @@ export const Hero = () => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/4 h-96 bg-gradient-to-b from-purple-500/20 to-transparent blur-2xl z-20"></div>
       
       {/* Main content */}
-      <div className="relative z-30 text-center max-w-4xl mx-auto">
+      <div className="relative z-30 text-center max-w-4xl mx-auto font-sans">
         <div className="mb-8">
           <span className="inline-block px-4 py-2 bg-slate-800/50 border border-purple-700/50 rounded-full text-sm text-slate-300 mb-6 backdrop-blur-sm">
             [ GET STARTED WITH NebulX ]

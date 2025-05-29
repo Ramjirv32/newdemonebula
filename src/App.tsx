@@ -5,8 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { LoadingProvider, useLoading } from "./context/LoadingContext";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { AuthProvider } from "./context/AuthContext";
+import LoadingIndicator from "./components/LoadingIndicator"; // Add this import
 
 // Main pages
 import Index from "./pages/Index";
@@ -29,34 +30,13 @@ import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
-// Route change detector - disabled loading
-const RouteChangeDetector = () => {
-  const location = useLocation();
-  const { startLoading, stopLoading } = useLoading();
-  
-  // Removed loading functionality
-  // useEffect(() => {
-  //   startLoading();
-  //   
-  //   // Stop loading after 1 second (1000ms)
-  //   const timer = setTimeout(() => {
-  //     stopLoading();
-  //   }, 1000); 
-  //   
-  //   return () => clearTimeout(timer);
-  // }, [location.pathname, startLoading, stopLoading]);
-  
-  return null;
-};
-
 // Animation wrapper component
 const AnimatedRoutes = () => {
   const location = useLocation();
   
   return (
     <LoadingProvider>
-      <RouteChangeDetector />
-      {/* Removed LoadingIndi component */}
+      <LoadingIndicator />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Index />} />
@@ -86,11 +66,13 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AnimatedRoutes />
-        </BrowserRouter>
+        <div className="font-sans"> {/* Add this wrapper with font-sans class */}
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AnimatedRoutes />
+          </BrowserRouter>
+        </div>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

@@ -441,7 +441,7 @@ const FileConverter: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden font-sans">
       {/* Navigation component remains the same */}
       <Navigation />
       
